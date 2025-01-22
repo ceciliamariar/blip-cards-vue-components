@@ -33,10 +33,6 @@
       <location
         class="blip-card in-reaction-to-location"
         v-else-if="inReactionTo.type === 'application/vnd.lime.location+json'"
-        :failed-to-send-msg="translations.failedToSend"
-        :latitude-msg="translations.latitude"
-        :longitude-msg="translations.longitude"
-        :text-msg="translations.text"
         :status="status"
         :position="position"
         :document="inReactionToValue"
@@ -50,6 +46,7 @@
         :editing="isCardEditing"
         :on-cancel="cancel"
         :simplified="true"
+        :translations="translations"
       />
       <web-link
         class="blip-card in-reaction-to-padding"
@@ -75,7 +72,6 @@
       />
       <unsuported-content
         v-else
-        class="blip-card in-reaction-to-padding"
         style="margin-bottom: 0px"
         :failed-to-send-msg="translations.failedToSend"
         :unsupported-content-msg="translations.unsupportedContent"
@@ -87,7 +83,6 @@
         :deletable="deletable"
         :editing="isCardEditing"
         :on-cancel="cancel"
-        :simplified="true"
       />
     </div>
     <div class="failed-message in-reaction-to-padding" v-if="hasFailedToLoad">
@@ -129,9 +124,6 @@
         type: Function
       },
       updatedPhotoMargin: {
-        type: Function
-      },
-      onOpenLink: {
         type: Function
       },
       translations: {
@@ -176,7 +168,7 @@
         return this.isTextPlain || this.isSelectType || this.isAcceptableInteractiveType
       },
       hasFailedToLoad() {
-        return Boolean(this.inReactionTo.type === undefined || this.inReactionTo.value === undefined)
+        return Boolean(!this.inReactionTo || this.inReactionTo.type === undefined || this.inReactionTo.value === undefined)
       },
       inReactionToValue() {
         return this.inReactionTo.value
